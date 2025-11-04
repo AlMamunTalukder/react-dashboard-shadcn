@@ -1,188 +1,294 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import * as React from "react"
+import { useLocation } from "react-router-dom"
 import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
+  BookCheck,
+  Database,
+  File,
+  Hand,
+  LayoutDashboard,
+  LayoutGrid,
+  Megaphone,
+  Percent
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
 import { NavUser } from "@/components/nav-user"
+import logo from '../../public/logo.png'
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
 
-// This is sample data.
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+// Combined navigation data
+const navData = [
+  // Simple menu items (no submenu)
+  {
+    title: "Dashboard",
+    url: "/dashboard",
+    icon: LayoutDashboard,
+    isActive: false,
   },
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
-  navMain: [
-    {
-      title: "Content",
-      url: "#",
-      icon: SquareTerminal,
-      isActive: true,
-      items: [
-        {
-          title: "Site Content",
-          url: "/site-content",
-        },
-        {
-          title: "Banner",
-          url: "/banner",
-        },
-        {
-          title: "Class Schedule",
-          url: "#",
-        },
-        {
-          title: "Instructior",
-          url: "#",
-        },
-        {
-          title: "Total Class",
-          url: "#",
-        },
-        {
-          title: "Holiday",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Seminer",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Courses",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Coupons",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  filemanger: [
-    {
-      name: "File manager",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
-  ],
-  
+  // Menu items with submenus
+  {
+    title: "Content",
+    url: "#",
+    icon: LayoutGrid,
+    isActive: false,
+    items: [
+      {
+        title: "About",
+        url: "/about",
+        isActive: false,
+      },
+      {
+        title: "Settings",
+        url: "/settings",
+        isActive: false,
+      },
+    ],
+  },
+  {
+    title: "Seminar",
+    url: "#",
+    icon: Megaphone,
+    isActive: false,
+    items: [
+      {
+        title: "Genesis",
+        url: "/genesis",
+        isActive: false,
+      },
+      {
+        title: "Explorer",
+        url: "/explorer",
+        isActive: false,
+      },
+      {
+        title: "Quantum",
+        url: "/quantum",
+        isActive: false,
+      },
+    ],
+  },
+  {
+    title: "Courses",
+    url: "#",
+    icon: BookCheck,
+    isActive: false,
+    items: [
+      {
+        title: "Genesis",
+        url: "/genesis",
+        isActive: false,
+      },
+      {
+        title: "Explorer",
+        url: "/explorer",
+        isActive: false,
+      },
+      {
+        title: "Quantum",
+        url: "/quantum",
+        isActive: false,
+      },
+    ],
+  },
+  {
+    title: "Coupons",
+    url: "#",
+    icon: Percent,
+    isActive: false,
+    items: [
+      {
+        title: "Genesis",
+        url: "/genesis",
+        isActive: false,
+      },
+      {
+        title: "Explorer",
+        url: "/explorer",
+        isActive: false,
+      },
+      {
+        title: "Quantum",
+        url: "/quantum",
+        isActive: false,
+      },
+    ],
+  },
+  {
+    title: "Attendance",
+    url: "#",
+    icon: Hand,
+    isActive: false,
+    items: [
+      {
+        title: "Genesis",
+        url: "/genesis",
+        isActive: false,
+      },
+      {
+        title: "Explorer",
+        url: "/explorer",
+        isActive: false,
+      },
+      {
+        title: "Quantum",
+        url: "/quantum",
+        isActive: false,
+      },
+    ],
+  },
+  {
+    title: "File Manager",
+    url: "#",
+    icon: File,
+    isActive: false,
+    items: [
+      {
+        title: "Genesis",
+        url: "/genesis",
+        isActive: false,
+      },
+      {
+        title: "Explorer",
+        url: "/explorer",
+        isActive: false,
+      },
+      {
+        title: "Quantum",
+        url: "/quantum",
+        isActive: false,
+      },
+    ],
+  },
+  {
+    title: "Database Backup",
+    url: "/design",
+    icon: Database,
+    isActive: false,
+  },
+
+]
+
+const userData = {
+  name: "Craft Skills",
+  email: "craft@gmail.com",
+  avatar: "/public/logo.png",
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const location = useLocation()
+  const [navItems, setNavItems] = React.useState(() =>
+    initializeActiveStates(navData, location.pathname)
+  )
+
+  // Update active states when route changes
+  React.useEffect(() => {
+    setNavItems(prevNav => updateActiveStates(prevNav, location.pathname))
+  }, [location.pathname])
+
+  const handleItemClick = (clickedTitle: string) => {
+    setNavItems(prevNav =>
+      prevNav.map(item => ({
+        ...item,
+        isActive: item.title === clickedTitle,
+        // Reset all sub-items when main item is clicked
+        items: item.items?.map((subItem: any) => ({
+          ...subItem,
+          isActive: false
+        }))
+      }))
+    )
+  }
+
+  const handleSubItemClick = (mainTitle: string, subItemTitle: string) => {
+    setNavItems(prevNav =>
+      prevNav.map(item => ({
+        ...item,
+        isActive: item.title === mainTitle,
+        items: item.items?.map((subItem: any) => ({
+          ...subItem,
+          isActive: subItem.title === subItemTitle && item.title === mainTitle
+        }))
+      }))
+    )
+  }
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        {/* <TeamSwitcher teams={data.teams} /> */}
-        Craft Dashboard
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              size="lg"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground border"
+            >
+              <div className="text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+                <img src={logo} className="rounded-lg" alt="Craft Skills Logo" />
+              </div>
+              <div className="grid flex-1 text-left text-sm leading-tight truncate font-medium">
+                Craft Skills
+              </div>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarHeader>
+
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.filemanger} />
+        <NavMain
+          items={navItems}
+          onItemClick={handleItemClick}
+          onSubItemClick={handleSubItemClick}
+        />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={userData} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   )
+}
+
+// Helper function to initialize active states based on current path
+function initializeActiveStates(navItems: any[], currentPath: string) {
+  return navItems.map(item => {
+    const isMainActive = item.url === currentPath
+    const activeSubItem = item.items?.find((subItem: any) => subItem.url === currentPath)
+
+    return {
+      ...item,
+      isActive: isMainActive || !!activeSubItem,
+      items: item.items?.map((subItem: any) => ({
+        ...subItem,
+        isActive: subItem.url === currentPath
+      }))
+    }
+  })
+}
+
+// Helper function to update active states based on current path
+function updateActiveStates(navItems: any[], currentPath: string) {
+  return navItems.map(item => {
+    const isMainActive = item.url === currentPath
+    const activeSubItem = item.items?.find((subItem: any) => subItem.url === currentPath)
+
+    return {
+      ...item,
+      isActive: isMainActive || !!activeSubItem,
+      items: item.items?.map((subItem: any) => ({
+        ...subItem,
+        isActive: subItem.url === currentPath
+      }))
+    }
+  })
 }
